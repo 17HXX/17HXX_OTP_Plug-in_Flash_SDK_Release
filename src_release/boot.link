@@ -1,0 +1,60 @@
+
+/* to tell the linker the program begin from __start label in cstartup.s, thus do not treat it as a unused symbol */
+ENTRY(__start)
+
+SECTIONS
+{
+    . = 0x0;
+        .vectors :
+        {
+        *(.vectors)
+        *(.vectors.*)	/* MUST as follows, when compile with -ffunction-sections -fdata-sections, session name may changed */
+        }
+	. = (((. + 3) / 4)*4);
+	PROVIDE(_dstored_data_ = .);
+	. = . + 0x808000 ;
+        .data :
+         AT ( _dstored_data_ )
+         {
+         PROVIDE(_start_data_ = . );
+         *(.data); 
+         *(.data.*); 
+         PROVIDE(_end_data_ = . );  
+         }
+	. = . - 0x808000 ;
+        .ram_code :
+        {
+        *(.ram_code)
+        *(.ram_code.*)
+        }
+	PROVIDE(_ramcode_size_ = . );
+	PROVIDE(_ramcode_size_div_16_ = (. + 15 ) / 16);
+	PROVIDE(_ramcode_size_div_16_align_256_ = (((. + 15 ) / 16 + 255) / 256) * 256);
+	PROVIDE(_ramcode_size_div_256_ = (. + 255) / 256);
+	PROVIDE(_ramcode_size_align_ = (. + 255) / 256 * 256);
+        .text :
+        {
+        *(.text)
+        *(.text.*)
+        }
+        .rodata :
+        {
+        *(.rodata)
+        *(.rodata.*)
+        }
+	. = (((. + 3) / 4)*4);
+	PROVIDE(_dstored_ = .);
+/*	. = . + 0x808000 ;								*/	/*  RUN_ALL_IN_RAM == 1  */
+	. = 0x808900 + _ramcode_size_align_;			  /*  RUN_ALL_IN_RAM == 0  */
+        .bss :
+         AT (  _dstored_ )
+        {
+	PROVIDE(_start_bss_ = .);
+        *(.sbss)
+        *(.sbss.*)
+        *(.bss)
+        *(.bss.*)
+        }
+	. = (((. + 3) / 4)*4);
+	PROVIDE(_end_bss_ = .);
+}
