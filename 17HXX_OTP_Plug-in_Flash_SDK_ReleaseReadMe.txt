@@ -1,6 +1,6 @@
-//--工作路径不宜过长，且应全是英文目录名，否则可能导致编译不过
-//--工作路径不宜过长，且应全是英文目录名，否则可能导致编译不过
-//--工作路径不宜过长，且应全是英文目录名，否则可能导致编译不过
+//--Development path should not be too long, and should be full English directory name, otherwise it may lead to compilation, however
+//--Development path should not be too long, and should be full English directory name, otherwise it may lead to compilation, however
+//--Development path should not be too long, and should be full English directory name, otherwise it may lead to compilation, however
 //-------------------------------------------------------------
 //-------------------------------------------------------------
 版本号：	V0111
