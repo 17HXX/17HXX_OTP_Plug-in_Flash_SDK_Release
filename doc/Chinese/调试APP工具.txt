@@ -1,0 +1,4 @@
+IOS 调试APP工具：
+在appstore 搜索  “lightblue”
+
+在android市场 搜索 “ble读写器”“BLE调试助手”
