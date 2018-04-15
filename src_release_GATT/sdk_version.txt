@@ -1,0 +1,1 @@
+BLE SDK_VERSION = 10.1
