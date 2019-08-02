@@ -4,7 +4,7 @@
 
 
 #define FW_VERSION_ID1 0x01
-#define FW_VERSION_ID2 0x09
+#define FW_VERSION_ID2 0x25
 
 
 typedef struct
@@ -164,6 +164,23 @@ u8 my_W24NotifyIn[20]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 static const u8 reportMapIos[] =
 {
 
+/**********************consumer control*************************/
+#if(CONSUME_REPORT_SUPPORT)
+
+0x05, 0x0C,		// USAGE_PAGE (Consumer Devices)
+0x09, 0x01,		// USAGE (Consumer Control)
+0xA1, 0x01,		// COLLECTION (Application)
+0x85, HID_REPORT_ID_CONSUME_CONTROL_INPUT,		 // Report ID (2)
+0x75, 0x10,		// REPORT_SIZE (10)
+0x95, 0x01,		// REPORT_COUNT (2)
+0x15, 0x01,		// LOGICAL_MINIMUM (1)
+0x26, 0x8c, 0x02, // LOGICAL_MAXIMUM (28c)
+0x19, 0x01,		// USAGE_MINIMUM (Button 1)
+0x2a, 0x8c, 0x02, // USAGE_MAXIMUM (Button 28c)
+0x81, 0x60,		// INPUT (data, array, abs)
+0xc0,   // END COLLECTION
+
+#endif
 /************************************keyboard*************************/
 #if(KEYBOARD_REPORT_SUPPORT)
 
@@ -215,29 +232,29 @@ static const u8 reportMapIos[] =
 
 
 #endif
-/**********************consumer control*************************/
-#if(CONSUME_REPORT_SUPPORT)
-
-0x05, 0x0C,		// USAGE_PAGE (Consumer Devices)
-0x09, 0x01,		// USAGE (Consumer Control)
-0xA1, 0x01,		// COLLECTION (Application)
-0x85, HID_REPORT_ID_CONSUME_CONTROL_INPUT,		 // Report ID (2)
-0x75, 0x10,		// REPORT_SIZE (10)
-0x95, 0x01,		// REPORT_COUNT (2)
-0x15, 0x01,		// LOGICAL_MINIMUM (1)
-0x26, 0x8c, 0x02, // LOGICAL_MAXIMUM (28c)
-0x19, 0x01,		// USAGE_MINIMUM (Button 1)
-0x2a, 0x8c, 0x02, // USAGE_MAXIMUM (Button 28c)
-0x81, 0x60,		// INPUT (data, array, abs)
-0xc0,   // END COLLECTION
-
-
-#endif
 };
 
 static const u8 reportMapAndroid[] =
 {
-#if 1
+	/**********************consumer control(25)*************************/
+#if(CONSUME_REPORT_SUPPORT)
+	
+	
+	0x05, 0x0C, 	  // USAGE_PAGE (Consumer Devices)
+	0x09, 0x01, 	  // USAGE (Consumer Control)
+	0xA1, 0x01, 	  // COLLECTION (Application)
+	0x85, HID_REPORT_ID_CONSUME_CONTROL_INPUT,	   // Report ID (2)
+	0x75, 0x10, 	  // REPORT_SIZE (10)
+	0x95, 0x01, 	  // REPORT_COUNT (2)
+	0x15, 0x01, 	  // LOGICAL_MINIMUM (1)
+	0x26, 0x8c, 0x02, // LOGICAL_MAXIMUM (28c)
+	0x19, 0x01, 	  // USAGE_MINIMUM (Button 1)
+	0x2a, 0x8c, 0x02, // USAGE_MAXIMUM (Button 28c)
+	0x81, 0x60, 	  // INPUT (data, array, abs)
+	0xc0,			  // END COLLECTION
+	
+#endif
+
 /*******************************keyboard(65)*************************/
 #if(KEYBOARD_REPORT_SUPPORT)
 
@@ -286,24 +303,6 @@ static const u8 reportMapAndroid[] =
 0x81, 0x00,  //	Input: (Data, Array)
 //
 0xC0, 	   // End Collection
-
-#endif
-/**********************consumer control(25)*************************/
-#if(CONSUME_REPORT_SUPPORT)
-
-
-0x05, 0x0C, 	  // USAGE_PAGE (Consumer Devices)
-0x09, 0x01, 	  // USAGE (Consumer Control)
-0xA1, 0x01, 	  // COLLECTION (Application)
-0x85, HID_REPORT_ID_CONSUME_CONTROL_INPUT, 	   // Report ID (2)
-0x75, 0x10, 	  // REPORT_SIZE (10)
-0x95, 0x01, 	  // REPORT_COUNT (2)
-0x15, 0x01, 	  // LOGICAL_MINIMUM (1)
-0x26, 0x8c, 0x02, // LOGICAL_MAXIMUM (28c)
-0x19, 0x01, 	  // USAGE_MINIMUM (Button 1)
-0x2a, 0x8c, 0x02, // USAGE_MAXIMUM (Button 28c)
-0x81, 0x60, 	  // INPUT (data, array, abs)
-0xc0,			  // END COLLECTION
 
 #endif
 
@@ -399,78 +398,7 @@ static const u8 reportMapAndroid[] =
 0x81, 0x02,
 0xc0,
 
-
 #endif
-
-#else
-
-0x05,0x01,
-0x09,0x05,
-0xa1,0x01,
-//0x85,0x01,
-
-0xa1,0x00,
-0x09,0x30,
-0x09,0x31,
-0x15,0x00,
-0x26,0xff,0xff,
-0x35,0x00,
-0x46,0xff,0xff,
-0x95,0x02,
-0x75,0x10,
-0x81,0x02,
-0xc0,
-
-0xa1,0x00,
-0x09,0x33,
-0x09,0x34,
-0x15,0x00,
-0x26,0xff,0xff,
-0x35,0x00,
-0x46,0xff,0xff,
-0x95,0x02,
-0x75,0x10,
-0x81,0x02,
-0xc0,
-
-0xa1,0x00,
-0x09,0x32,
-0x15,0x00,
-0x26,0xff,0xff,
-0x35,0x00,
-0x46,0xff,0xff,
-0x95,0x01,
-0x75,0x10,
-0x81,0x02,
-0xc0,
-
-0x05,0x09,
-0x19,0x01,
-0x29,0x0a,
-0x95,0x0a,
-0x75,0x01,
-0x81,0x02,
-
-0x05,0x01,
-0x09,0x39,
-0x15,0x01,
-0x25,0x08,
-0x35,0x00,
-0x46,0x3b,0x10,
-0x66,0x0e,0x00,
-0x75,0x04,
-0x95,0x01,
-0x81,0x42,
-0x75,0x02,
-0x95,0x01,
-0x81,0x03,
-0x75,0x08,
-0x95,0x02,
-0x81,0x03,
-0xc0,  
-
-#endif
-
 };
 
 
@@ -546,6 +474,15 @@ const attribute_t my_Attributes[] =
     {0,2,1,(u8*)(&my_characterUUID),      (u8*)(&PROP_READ_WRITE_NORSP)},               //prop
     {0,2,sizeof(protocolMode),(u8*)(&hidProtocolModeUUID),   (u8*)(&protocolMode)},   //value
     // 19
+#if(CONSUME_REPORT_SUPPORT)
+
+    //  consumer report in: 4 (char-val-client-ref)
+    {0,2,1,(u8*)(&my_characterUUID),      (u8*)(&PROP_READ_NOTIFY)},                //prop
+    {0,2,sizeof(reportConsumerControlIn),(u8*)(&hidReportUUID),   (u8*)(reportConsumerControlIn)}, //value
+    {0,2,sizeof(generalValInCCC),(u8*)(&clientCharacterCfgUUID),    (u8*)(generalValInCCC)},  //value
+    {0,2,sizeof(reportRefConsumerControlIn),(u8*)(&reportRefUUID),     (u8*)(reportRefConsumerControlIn)},  //value
+#endif
+
 #if(KEYBOARD_REPORT_SUPPORT)
 
     // report in : 4 (char-val-client-ref), handle start from 0x19
@@ -554,15 +491,6 @@ const attribute_t my_Attributes[] =
     {0,2,sizeof(generalValInCCC),(u8*)(&clientCharacterCfgUUID),    (u8*)(generalValInCCC)},  //value
     {0,2,sizeof(reportRefKeyIn),(u8*)(&reportRefUUID),     (u8*)(reportRefKeyIn)},  //value
 
-#endif
-
-#if(CONSUME_REPORT_SUPPORT)
-
-    //  consumer report in: 4 (char-val-client-ref)
-    {0,2,1,(u8*)(&my_characterUUID),      (u8*)(&PROP_READ_NOTIFY)},                //prop
-    {0,2,sizeof(reportConsumerControlIn),(u8*)(&hidReportUUID),   (u8*)(reportConsumerControlIn)}, //value
-    {0,2,sizeof(generalValInCCC),(u8*)(&clientCharacterCfgUUID),    (u8*)(generalValInCCC)},  //value
-    {0,2,sizeof(reportRefConsumerControlIn),(u8*)(&reportRefUUID),     (u8*)(reportRefConsumerControlIn)},  //value
 #endif
 
 

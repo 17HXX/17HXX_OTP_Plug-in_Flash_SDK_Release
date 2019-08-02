@@ -41,7 +41,7 @@ void blt_disable_latency(){
 }
 
 
-u8  tbl_mac [] = {0x20, 0x17, 0x06, 0x29, 0x01, 0x09};
+u8  tbl_mac [] = {0x34, 0x14, 0x13, 0x14, 0x15, 0x16};
 u8	tbl_adv [42] =
 	{	0x00, 37,
 		0, 0, 0, 0, 0, 0,		//mac address
@@ -50,7 +50,7 @@ u8	tbl_adv [42] =
 		0x03,0x19,GAP_APPEARE_ROLE&0x0ff,(GAP_APPEARE_ROLE>>8)&0xff,
 
 		19, 0x09, 	  
-		'D','E','M','O','_','H','I','D','_','0','1','1','0',' ',' ',' ',' ',' ',// must be is 18 byte
+		'D','E','M','O','_','H','I','D','_','0','1','2','5',' ',' ',' ',' ',' ',// must be is 18 byte
 		0, 0, 0			//reserve 3 bytes for CRC
 	};
 u8	tbl_rsp [] =
@@ -247,17 +247,15 @@ void user_init()
 		att_response_cb(boot_code + i);
 	}
 #endif
-	
+
 #if(DEBUG_FROM_FLASH)
 	OTA_init_tmp();
 	set_tp_flash();
-	set_freq_offset_flash(0x58);
 	set_mac_flash(tbl_mac);
 //	static u32 chip_id;
 //	chip_id = read_chip_ID_flash();
 #else
 	set_tp_OTP();
-	set_freq_offset_OTP(0x58);
 	set_mac_OTP(tbl_mac);
 //	static u32 chip_id;
 //	chip_id = read_chip_ID_OTP();
@@ -333,10 +331,12 @@ void att_response_cb( u8 *p){
  * and establishs a connection successfully
  * ex: start send connection parameter update request after a time from 
  * the connection event; notify application connection establishment state*/
- 
+
+u8 Maddr[6] = {0};
 void task_connection_established(rf_packet_connect_t* p){
 	//adv_start_tick = last_update_paramter_time = clock_time();// in bond state better
 	//adv_time_cnt = 0;
+	//memcpy(Maddr,p->scanA, 6);				//do not use memcpy, it's time-consuming
 	tick_connected_timer_tmp=clock_time();
 	tick_batt_timer_tmp=tick_connected_timer_tmp;
 	connected_idle_time_count_tmp=0;
@@ -348,6 +348,21 @@ void task_connection_established(rf_packet_connect_t* p){
 
 
 }
+u16 Mvendor = 0;
+u8 MscanA[6] = {0};
+void task_ScanReq_Recieved(rf_packet_scan_req_t* p){
+	//memcpy(MscanA, p+6, 6);					//do not use memcpy, it's  time-consuming
+	MscanA[0] = p->scanA[0];
+	MscanA[1] = p->scanA[1];
+	MscanA[2] = p->scanA[2];
+	MscanA[3] = p->scanA[3];
+	MscanA[4] = p->scanA[4];
+	MscanA[5] = p->scanA[5];
+}
+void task_Version_ind(rf_packet_version_ind_t* p){
+	Mvendor = p->vendor;
+}
+
 
 /*task_connection_terminated
  * This event is returned once connection is terminated
@@ -667,6 +682,7 @@ static inline void public_loop()
    else
    {
 		// Must be on the final
+//		blt_send_adv (BLT_ENABLE_ADV_37);
 		blt_send_adv (BLT_ENABLE_ADV_ALL);
 		//blt_send_adv (BLT_ENABLE_ADV_38);
    }

@@ -159,6 +159,8 @@ typedef void (*irq_st_func) (void);
 extern void task_connection_established(rf_packet_connect_t* p);
 extern void task_connection_terminated(rf_packet_connect_t* p);
 extern void task_bond_finished(rf_packet_connect_t* p);
+extern void task_Version_ind(rf_packet_version_ind_t* p);
+extern void task_ScanReq_Recieved(rf_packet_scan_req_t* p);
 
 /*************Because of OTP resource limites, only following events are available for current SDK**************/
 /*task_beacon_done

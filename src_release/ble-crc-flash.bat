@@ -1,0 +1,1 @@
+ble-crc.exe  17H26_VR_FLASH/17H26_VR_FLASH.bin  17H26_VR_FLASH.bin

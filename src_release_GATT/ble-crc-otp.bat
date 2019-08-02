@@ -1,0 +1,1 @@
+ble-crc.exe  17H26_VR_OTP/17H26_VR_OTP.bin  17H26_VR_OTP.bin

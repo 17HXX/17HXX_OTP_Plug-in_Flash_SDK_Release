@@ -26,6 +26,11 @@ _attribute_ram_code_ void irq_handler(void)
 int main (void) {
     cpu_wakeup_init();
 
+#if(DEBUG_FROM_FLASH)
+	set_freq_offset_flash(0x58);
+#else
+	set_freq_offset_OTP(0x58);
+#endif
     //clock_init
     write_reg8(0x66, 0x26); // 32M pll
 

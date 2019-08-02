@@ -10,11 +10,11 @@
 // !!!!
 
 #if(OTA_ENABLE)
-_attribute_ram_code_ static inline int flash_is_busy(){
+_attribute_ota_code_ static inline int flash_is_busy(){
 	return mspi_read() & 0x01;				//  the busy bit, pls check flash spec
 }
 
-_attribute_ram_code_ static void flash_send_cmd(u8 cmd){
+_attribute_ota_code_ static void flash_send_cmd(u8 cmd){
 	mspi_high();
 	sleep_us(1);
 	mspi_low();
@@ -22,13 +22,13 @@ _attribute_ram_code_ static void flash_send_cmd(u8 cmd){
 	mspi_wait();
 }
 
-_attribute_ram_code_ static void flash_wait_done(){
+_attribute_ota_code_ static void flash_wait_done(){
 	flash_send_cmd(FLASH_READ_STATUS_CMD);
 	while(flash_is_busy());
 	mspi_high();
 }
 
-_attribute_ram_code_ void flash_erase_read_write (u32 addr, u32 len, u8 *buf, u8 cmd){
+_attribute_ota_code_ static void flash_erase_read_write (u32 addr, u32 len, u8 *buf, u8 cmd){
 	if(FLASH_READ_CMD != cmd){ 
 		flash_send_cmd(FLASH_WRITE_ENABLE_CMD);
 	}
@@ -70,13 +70,19 @@ void flash_erase_sector(u32 addr){
 	irq_restore(r);
 }
 
-_attribute_ram_code_ void flash_erase_block(u32 addr){
+#if(OTA_ENABLE)
+_attribute_ota_code_
+#endif
+void flash_erase_block(u32 addr){
 	u8 r = irq_disable();
 	flash_erase_read_write(addr, 0, 0, FLASH_BLK_ERASE_CMD);
 	irq_restore(r);
 }
 #if(FLASH_WRITE_ENABLE)
-_attribute_ram_code_ void flash_write_page(u32 addr, u32 len, u8 *buf){
+#if(OTA_ENABLE)
+_attribute_ota_code_
+#endif
+void flash_write_page(u32 addr, u32 len, u8 *buf){
 	u8 r = irq_disable();
 	flash_erase_read_write(addr, len, buf, FLASH_WRITE_CMD);
 	irq_restore(r);
@@ -84,7 +90,10 @@ _attribute_ram_code_ void flash_write_page(u32 addr, u32 len, u8 *buf){
 #endif
 
 #if(FLASH_READ_ENABLE)
-_attribute_ram_code_ void flash_read_page(u32 addr, u32 len, u8 *buf){
+#if(OTA_ENABLE)
+_attribute_ota_code_
+#endif
+void flash_read_page(u32 addr, u32 len, u8 *buf){
 	u8 r = irq_disable();
 	flash_erase_read_write(addr, len, buf, FLASH_READ_CMD);
 	irq_restore(r);
@@ -92,7 +101,7 @@ _attribute_ram_code_ void flash_read_page(u32 addr, u32 len, u8 *buf){
 #endif
 
 #if 0
-_attribute_ram_code_ u32 flash_get_jedec_id(){
+_attribute_ota_code_ u32 flash_get_jedec_id(){
 	u8 r = irq_disable();
 	flash_send_cmd(FLASH_GET_JEDEC_ID);
 	u8 manufacturer = mspi_read();

@@ -22,6 +22,6 @@ static inline void wd_stop(void){
 }
 
 static inline void wd_clear(void){
-	reg_tmr_sta = FLD_TMR_STA_WD;
+	reg_tmr_sta |= FLD_TMR_STA_WD;
 }
 

@@ -4,7 +4,7 @@
 
 
 #define FW_VERSION_ID1 0x01
-#define FW_VERSION_ID2 0x10
+#define FW_VERSION_ID2 0x25
 
 #define FW_Soft_VERSION_ID1 00
 #define FW_Soft_VERSION_ID2 01
@@ -493,17 +493,18 @@ int att_get_reportMapSize(){
 //		return sizeof(reportMapIos);
 //	}
 	return 0;
-	}
+}
 
 const u8 ota_service_uuid[16] = {0x11,0x19,0x0d,0x0c,0x0b,0x0a,0x09,0x08,0x07,0x06,0x05,0x04,0x03,0x02,0x01,0x00};
 const u8 ota_write_char_uuid[16] ={0x12,0x2B,0x0d,0x0c,0x0b,0x0a,0x09,0x08,0x07,0x06,0x05,0x04,0x03,0x02,0x01,0x00} ;
 
 u8 ota_data[20];
+u8 generalValInCCC[2];
 
 const attribute_t my_Attributes[] = 
 {
 //DFSADF
-	{13,0,0,0,0}, //
+	{17,0,0,0,0}, //
 
 /**************************************************************************
 						GenericAttribute(Services)

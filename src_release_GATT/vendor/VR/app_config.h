@@ -10,8 +10,9 @@ extern "C" {
 
 
 
+#define OTA_ENABLE				0
 
-//#define TEST_JZLI
+
 
 //////////// product  Information  //////////////////////////////
 #define ID_VENDOR               0x248a          // for report
@@ -41,8 +42,10 @@ extern "C" {
 
 ///////////////////  ADC  /////////////////////////////////
 #if(MODULE_ADC_ENABLE)
-#define ADC_CHNM_ANA_INPUT      ADC_CHN_GP17  //others parameters (ADC_CHN_GP17 ADC_CHN_GP18 ADC_CHN_GP22 ADC_CHN_GP23)
+
+#define ADC_CHNM_ANA_INPUT      ADC_CHN_GP18  //others parameters (ADC_CHN_GP17 ADC_CHN_GP18 ADC_CHN_GP22 ADC_CHN_GP23)
 #define ADC_CHNM_REF_SRC        ADC_REF_1P3V  //others parameters (ADC_REF_1P3V ADC_REF_VDDH)
+
 #endif
 
 ///////////////////  RAM&OTP Optimization    /////////////////////////////////

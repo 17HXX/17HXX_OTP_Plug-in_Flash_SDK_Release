@@ -8,7 +8,7 @@
 	.equ RAM_SIZE,				0x1800			// 0x4000 是 16K,  根据芯片实际大小调整
 
 	#define REMOVE_IRQ			1				//  check app_config.h,  必须一致
-	#define HIGH_OTP_SPEED		1
+	#define HIGH_OTP_SPEED		0
 	#define HIGH_SPI_SPEED		0
 	#define RSV_RAM_FOR_APP		116				// 17H26, 与 cstartup.s 共享内存,  rf_rx_buff要128 bytes, 保证cstartup.s大于 128 bytes
 	.equ IRQ_STK_SIZE,			0x40			// 根据实际需要修改， 如果 ram 不紧张 0x200 是一个好选择, 对于 17H26 不用中断，可以用 0x40
@@ -20,12 +20,14 @@
 	.extern  _ramcode_size_div_16_align_256_
 	.extern  _ramcode_size_div_256_
 	.extern  _ramcode_size_align_
+	.extern  _dstored_
 	
 __start:									@ MUST,  referenced by boot.link
 
 	.org 0x0
 	tj	__reset								@ two bytes
-	.byte	0x01,0x10,0x59,0x4B,0x51,17	@ self MAC
+	.hword	0x0117						@ bin size for OTA check
+	.word	0x00000000						@ CRC reserved for OTA check
 	.org 0x8
 	.word	(0x544c4e4b)					@ must !!!!
 #if RUN_ALL_IN_RAM
@@ -156,7 +158,13 @@ ZERO_END:
 	tadd     	r0, #1
 	tstorerb	r0, [r1, #1]
 #endif
-
+#if(OTA_ENABLE)
+	tloadr		r1, OTA_FLAG_L
+	tloadrb 	r2, [r1, #8]
+	tcmp		r2, #0x4b					@ 0x4b is the fixed byte for all bin-file (that is 0x544c4e4b)
+	tjne		MAIN_L
+	tjl 		otaDone
+#endif
 	tjl	main
 END:	tj	END
 
@@ -175,6 +183,10 @@ SPISPEED:
 #if(HIGH_OTP_SPEED)
 OTPSPEED:
 	.word	(0x800603)
+#endif
+#if(OTA_ENABLE)
+OTA_FLAG_L:
+	.word	OTA_FLASH_ADDR_START
 #endif
 	
 DAT1:

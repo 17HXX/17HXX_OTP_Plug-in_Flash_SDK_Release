@@ -3,6 +3,12 @@
 //--Development path should not be too long, and should be full English directory name, otherwise it may lead to compilation, however
 //-------------------------------------------------------------
 //-------------------------------------------------------------
+版本号：	V0125
+日期:		20190212
+		1、修复一些已知bug
+
+
+//-------------------------------------------------------------
 版本号：	V0111
 日期:		20180116
 		1、chipID 起始位置由0x3FE9变更为0x3FEA

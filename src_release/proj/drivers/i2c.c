@@ -213,82 +213,32 @@ u8 i2c_read(u8 id, u16 adr){
 // 3, mem_addr is a address equal to  (0x808000 + real_mem), such as 0x809ea0
 // 4, mem_addr is the write buffer, whereas (mem_addr + 64) is the read buffer
 // 5, i2c_slave_init() is called instead of i2c_init()
-u8 *i2c_slave_write_buff, *i2c_slave_read_buff;
-void i2c_slave_init(u32 mem_addr){
-	// 注意reg_rst_clk0 的I2C  clk 打开了吗?
-	reg_gpio_pe_gpio &= ~ BIT(7);
-	reg_gpio_pf_gpio &= ~ BIT(1);
-
-	analog_write(20, analog_read(20) | (GPIO_PULL_UP_10K<<2) | (GPIO_PULL_UP_10K<<6));	//  CK, DI, pullup 10K
-
-	reg_i2c_set = (I2C_SLAVE_SELF_ID << 8) | ((FLD_I2C_ADDR_AUTO | FLD_I2C_MEM_MAP) << 24);
-	reg_spi_sp = 0;														//force PADs act as I2C
-	reg_i2c_mem_map = mem_addr;
-	i2c_slave_write_buff = (u8*)mem_addr;
-	i2c_slave_read_buff = (u8*)(mem_addr + 64);
+static u8 i2c_slave_buff[128] _attribute_aligned_(128);	// must 128  align
+void i2c_slave_init(u8 id){
+	reg_rst_clk0 |= FLD_CLK_ADC_EN;		//  没有理由，芯片组的人说必须打开, 否则reg_i2c_irq_status 标志不对
+	reg_i2c_set = (id << 8) | (0xff << 16) | ((FLD_I2C_ADDR_AUTO | FLD_I2C_MEM_MAP) << 24);
+//	reg_spi_sp = 0;						//no need for 8263
+	reg_i2c_mem_map = (u32)(i2c_slave_buff);
 }
-// sample  receive and send  command handling, pseudo code
-#if(0)
-void i2c_slave_sample_recv_command_poll(void){
-	if(i2c_slave_write_buff[0] == CMD_OK){
-		gpio_write (HOST_INTERRUPT_PIN, !HOST_INTERRUPT_LEVEL);	// clear interrupt pin
-		parse_cmd();
-		do_cmd();
-	}
-}
-void i2c_slave_sample_send_command(void){
-	foreach(i, 10){
-		i2c_slave_read_buff[i] = data[i];
-	}
-	gpio_write (HOST_INTERRUPT_PIN, HOST_INTERRUPT_LEVEL); // set interrupt, to notify host to read
-}
-#endif
 
-static int i2c_irq_pin = 0;
-static i2c_callback_func i2c_callback;
-void i2c_check_cmd(){
-	if(i2c_callback){
-		if((reg_i2c_irq_status & (FLD_I2C_STATUS_WR | FLD_I2C_STATUS_RD)) == FLD_I2C_STATUS_WR){
-			i2c_callback(i2c_slave_write_buff);
-		}else if((reg_i2c_irq_status & (FLD_I2C_STATUS_WR | FLD_I2C_STATUS_RD)) == (FLD_I2C_STATUS_WR | FLD_I2C_STATUS_RD)){
-			*(u32*)(i2c_slave_read_buff) = 0;
+//  !!!! master must read first then write immediately
+//  !!!! first byte must be the length of command
+int i2c_check_cmd(){
+	if(reg_i2c_irq_status & FLD_I2C_HOST_PKT_IRQ){
+		if(i2c_slave_buff[0]){
+			spp_slave_write_cb(i2c_slave_buff, i2c_slave_buff[0]);
+			i2c_slave_buff[0] = 0;
 		}
-		reg_i2c_clr_status = (FLD_I2C_STATUS_WR | FLD_I2C_STATUS_RD);
+		i2c_slave_buff[64] = 0;
+		reg_i2c_irq_status = FLD_I2C_HOST_PKT_IRQ;
+		return 1;		//  got i2c write/read command
 	}
-
-}
-
-int i2c_notify_data_ready(void){
-	gpio_set_output_en(i2c_irq_pin, 1);
-	sleep_us(100);
-	gpio_set_output_en(i2c_irq_pin, 0);
 	return 0;
 }
+
 void i2c_send_response(u8 *buf, int len){
-	if(len > 64) return;
-	memcpy4(&i2c_slave_read_buff[0], buf, len+3);
-	i2c_notify_data_ready();
+	memcpy(i2c_slave_buff+64, buf, len);
 }
-
-void i2c_slave_register(int pin, i2c_callback_func callback){
-	i2c_slave_init(0x80c000 - 128);
-
-	gpio_set_func(pin, AS_GPIO);
-	gpio_write(pin, 0);
-	gpio_set_input_en(pin, 1);
-	i2c_irq_pin = pin;
-	i2c_callback = callback;
-
-#if (SP_SRC_I2C)
-	ev_on_poll(EV_POLL_I2C_CMD, i2c_check_cmd);
-#endif
-}
-
-void i2c_slave_deregister(void){
-	i2c_callback = 0;
-}
-
-
 #endif
 
 ///////////////  I2C simulation ////////////////////////////////////

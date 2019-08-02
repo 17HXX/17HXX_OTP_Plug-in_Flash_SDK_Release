@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+<?fileVersion 4.0.0?>
+
+<cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
 	<storageModule moduleId="org.eclipse.cdt.core.settings">
 		<cconfiguration id="com.telink.tc32eclipse.configuration.app.release.1121156933.1715305487.2075187956.1454992863.132969007.501524205.1380164055.987396901.2076157562.1809959923.346019507.306240912.530308564.1621834744.380081576.761913963.468891485.728337814">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.telink.tc32eclipse.configuration.app.release.1121156933.1715305487.2075187956.1454992863.132969007.501524205.1380164055.987396901.2076157562.1809959923.346019507.306240912.530308564.1621834744.380081576.761913963.468891485.728337814" moduleId="org.eclipse.cdt.core.settings" name="17H26_VR_flash">
@@ -13,7 +15,7 @@
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactName="${ConfigName}" buildArtefactType="com.telink.tc32eclipse.buildArtefactType.app" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=com.telink.tc32eclipse.buildArtefactType.app,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release" description="" id="com.telink.tc32eclipse.configuration.app.release.1121156933.1715305487.2075187956.1454992863.132969007.501524205.1380164055.987396901.2076157562.1809959923.346019507.306240912.530308564.1621834744.380081576.761913963.468891485.728337814" name="17H26_VR_flash" parent="com.telink.tc32eclipse.configuration.app.release" prebuildStep="${workspace_loc:/${ProjName}}/getver.sh">
+				<configuration artifactName="${ConfigName}" buildArtefactType="com.telink.tc32eclipse.buildArtefactType.app" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release,org.eclipse.cdt.build.core.buildArtefactType=com.telink.tc32eclipse.buildArtefactType.app" description="" id="com.telink.tc32eclipse.configuration.app.release.1121156933.1715305487.2075187956.1454992863.132969007.501524205.1380164055.987396901.2076157562.1809959923.346019507.306240912.530308564.1621834744.380081576.761913963.468891485.728337814" name="17H26_VR_flash" parent="com.telink.tc32eclipse.configuration.app.release" prebuildStep="${workspace_loc:/${ProjName}}/getver.sh">
 					<folderInfo id="com.telink.tc32eclipse.configuration.app.release.1121156933.1715305487.2075187956.1454992863.132969007.501524205.1380164055.987396901.2076157562.1809959923.346019507.306240912.530308564.1621834744.380081576.761913963.468891485.728337814." name="/" resourcePath="">
 						<toolChain id="com.telink.tc32eclipse.toolchain.TC32Win.app.release.157014558" name="TC32-GCC Toolchain" superClass="com.telink.tc32eclipse.toolchain.TC32Win.app.release">
 							<option id="com.telink.tc32eclipse.toolchain.options.toolchain.objcopy.flash.app.release.1478019449" name="Generate binary file for Flash memory" superClass="com.telink.tc32eclipse.toolchain.options.toolchain.objcopy.flash.app.release"/>
@@ -42,7 +44,7 @@
 							</tool>
 							<tool command="tc32-elf-ld --gc-sections" id="com.telink.tc32eclipse.tool.linker.TC32Win.app.release.905023202" name="TC32 C Linker" superClass="com.telink.tc32eclipse.tool.linker.TC32Win.app.release">
 								<option id="com.telink.tc32eclipse.linker.option.libs.1681860755" name="Libraries (-l)" superClass="com.telink.tc32eclipse.linker.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" value="lt_17H26_0111"/>
+									<listOptionValue builtIn="false" value="lt_17H26"/>
 								</option>
 								<option id="com.telink.tc32eclipse.linker.option.libpath.137874100" name="Libraries Path (-L)" superClass="com.telink.tc32eclipse.linker.option.libpath" valueType="stringList">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/proj_lib}&quot;"/>
@@ -12230,7 +12232,7 @@
 							</tool>
 							<tool command="tc32-elf-ld --gc-sections" id="com.telink.tc32eclipse.tool.linker.TC32Win.app.release.837095053" name="TC32 C Linker" superClass="com.telink.tc32eclipse.tool.linker.TC32Win.app.release">
 								<option id="com.telink.tc32eclipse.linker.option.libs.1459864459" name="Libraries (-l)" superClass="com.telink.tc32eclipse.linker.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" value="lt_17H26_0111"/>
+									<listOptionValue builtIn="false" value="lt_17H26"/>
 								</option>
 								<option id="com.telink.tc32eclipse.linker.option.libpath.304662775" name="Libraries Path (-L)" superClass="com.telink.tc32eclipse.linker.option.libpath" valueType="stringList">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/proj_lib}&quot;"/>
@@ -24439,7 +24441,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="proj_lib/ble_l2cap/ble_ll_ota.c|proj|vendor|proj/drivers/somatic_sensor.c|vendor/8266_ble_master_kma_dongle|proj_lib/ble_ll|proj/drivers/led.c|proj/telink_rf/frame.c|proj/telink_rf|proj/freakz|vendor/common/device_id.c|vendor/8263_tHID|vendor/8266_ble_module|proj/os/sys.c|proj/ext_drv|vendor/8266_host_controller|vendor/common/led_rx.c|proj/unit_test|proj/ext_drv/mouse_drv.c|vendor/common/mouse_driver.c|proj/drivers/mouse.c|vendor/common/led_tx.c|vendor/common/custom.c|vendor/8267_driver_test|vendor/8263_remote_pp|vendor/8263_antiloss|vendor/mouse|vendor/8266_ble_slave|vendor/common/led_cfg.c|vendor/8263_mesh_light|proj/uip_xxx|vendor/8267_ble_headphone|proj/contiki_xxx|drivers/spi_i.c|vendor/mesh_light|vendor/ble_remote|proj/telink_rf/tl_rf.c|vendor/8266_ble_remote|tlsdk_hisense_final_alpha|vendor/8267_sniffer|vendor/8267_ble_remote|freakz|vendor/pktsniffer|vendor/8263_selfie|vendor/ble_master|vendor/ble_master_kma_dongle|vendor/8266_ble_selfie|8267_ble_remote|proj/simu|os/ae.c|vendor/8263_VR|proj/app_xxx|vendor/8267_kt_remote|vendor/km_sim|vendor/audio_dongle|vendor/8267_audio_dongle|os/eventio|proj/uip|vendor/8263_ble_module|proj/contiki|vendor/antiloss|vendor/8263_VR/YKQ_LED.c|vendor/dongle|vendor/ble_slave|vendor/8263_VR/VR.c|vendor/common/device_mouse.c|vendor/8263_remote/|8266_ble_remote|proj/telink_rf/tl_rf_audio.c|vendor/8266_antiloss|vendor/emi|vendor/l2cap_test|proj/drivers/rfhw.c|vendor/common/km_ui.c|proj/drivers/ir.c|vendor/ble_headphone|vendor/blueLight|proj/ext_drv/mex.c|proj/drivers/rf.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
+						<entry excluding="proj|vendor|proj/drivers/somatic_sensor.c|vendor/8266_ble_master_kma_dongle|proj_lib/ble_ll|proj/drivers/led.c|proj/telink_rf/frame.c|proj/telink_rf|proj/freakz|vendor/common/device_id.c|vendor/8263_tHID|vendor/8266_ble_module|proj/os/sys.c|proj/ext_drv|vendor/8266_host_controller|vendor/common/led_rx.c|proj/unit_test|proj/ext_drv/mouse_drv.c|vendor/common/mouse_driver.c|proj/drivers/mouse.c|vendor/common/led_tx.c|vendor/common/custom.c|vendor/8267_driver_test|vendor/8263_remote_pp|vendor/8263_antiloss|vendor/mouse|vendor/8266_ble_slave|vendor/common/led_cfg.c|vendor/8263_mesh_light|proj/uip_xxx|vendor/8267_ble_headphone|proj/contiki_xxx|drivers/spi_i.c|vendor/mesh_light|vendor/ble_remote|proj/telink_rf/tl_rf.c|vendor/8266_ble_remote|tlsdk_hisense_final_alpha|vendor/8267_sniffer|vendor/8267_ble_remote|freakz|vendor/pktsniffer|vendor/8263_selfie|vendor/ble_master|vendor/ble_master_kma_dongle|vendor/8266_ble_selfie|8267_ble_remote|proj/simu|os/ae.c|vendor/8263_VR|proj/app_xxx|vendor/8267_kt_remote|vendor/km_sim|vendor/audio_dongle|vendor/8267_audio_dongle|os/eventio|proj/uip|vendor/8263_ble_module|proj/contiki|vendor/antiloss|vendor/8263_VR/YKQ_LED.c|vendor/dongle|vendor/ble_slave|vendor/8263_VR/VR.c|vendor/common/device_mouse.c|vendor/8263_remote/|8266_ble_remote|proj/telink_rf/tl_rf_audio.c|vendor/8266_antiloss|vendor/emi|vendor/l2cap_test|proj/drivers/rfhw.c|vendor/common/km_ui.c|proj/drivers/ir.c|vendor/ble_headphone|vendor/blueLight|proj/ext_drv/mex.c|proj/drivers/rf.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

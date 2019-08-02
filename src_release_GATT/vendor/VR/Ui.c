@@ -4,6 +4,7 @@
 #include "../../proj/drivers/flash.h"
 
 //static inline void send_databuf_tmp();
+
 // Enable TAIL_BOOT_CODE_PRESET to embed bootcode to bin file, 
 // such make bin file size to be exact 16K
 #define  TAIL_BOOT_CODE_PRESET		0
@@ -34,8 +35,8 @@ _attribute_custom_code_  volatile u8 const boot_code[] = {
 
 
 #define LOW_ADV_INTERVAL 		50	//700	//700	///50//700//20//20  //
-#define PRODUCT_ID1				0x01
-#define PRODUCT_ID2				0x01
+#define PRODUCT_ID1				0xff
+#define PRODUCT_ID2				0xff
 #define ADDRESS_OFFSET			19
 
 
@@ -45,7 +46,8 @@ void blt_disable_latency(){
 	blt_retry = 1;
 }
 
-u8  tbl_mac [] = {0x25, 0x13, 0x15, 0x49, 0x04, 0x09};
+
+u8  tbl_mac [] = {0x34, 0x12, 0x13, 0x17, 0x17, 0x17};
 u8	tbl_rsp [] =
 {
 	0x00, 6,								//type len
@@ -60,7 +62,7 @@ u8	tbl_adv [] =
 	0x02, 0x01, 0x06,
 	0x03, 0x02, 0xC0, 0xFF,		// incomplete list of service class UUIDs (0x1812, 0x180F)
 	0x0b, 0xff, PRODUCT_ID1, PRODUCT_ID2, 0xFF, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-	11, 0x09, 'D', 'e', 'm', 'o', 'n', '0', '1', '1', '0', ' ', // max is 18 byte
+	11, 0x09, 'D', 'e', 'm', 'o', 'n', '0', '1', '2', '5', ' ', // max is 18 byte
 	0, 0, 0,			//reserve 3 bytes for CRC
 };
 
@@ -163,17 +165,15 @@ void user_init()
 		att_response_cb(boot_code + i);
 	}
 #endif
-	
+
 #if(DEBUG_FROM_FLASH)
 	OTA_init_tmp();
 	set_tp_flash();
-	set_freq_offset_flash(0x56);
 	set_mac_flash(tbl_mac);
 //	static u32 chip_id;
 //	chip_id = read_chip_ID_flash();
 #else
 	set_tp_OTP();
-	set_freq_offset_OTP(0x56);
 	set_mac_OTP(tbl_mac);
 //	static u32 chip_id;
 //	chip_id = read_chip_ID_OTP();
@@ -213,7 +213,8 @@ int att_write_cb(void*p)
 	
 	
 	#if(OTA_ENABLE)
-	 if(src->handle == OTA_CMD_OUT_DP_H){
+#define OTA_HANDLE	15
+	 if(src->handle == OTA_HANDLE){
 		u8 result=otaWrite(src);
 		
 		return ATT_HANDLED;
@@ -242,13 +243,30 @@ void att_response_cb( u8 *p){
  * and establishs a connection successfully
  * ex: start send connection parameter update request after a time from 
  * the connection event; notify application connection establishment state*/
- 
+
+u8 Maddr[6] = {0};
 void task_connection_established(rf_packet_connect_t* p){
 	//adv_start_tick = last_update_paramter_time = clock_time();// in bond state better
 	//adv_time_cnt = 0;
+	//memcpy(Maddr,p->scanA, 6);				//do not use memcpy, it's time-consuming
 	tick_connected_timer_tmp=clock_time();
 	device_status_tmp=CONNECTED_DEVICE_STATUS;
 }
+u16 Mvendor = 0;
+u8 MscanA[6] = {0};
+void task_ScanReq_Recieved(rf_packet_scan_req_t* p){
+	//memcpy(MscanA, p+6, 6);					//do not use memcpy, it's  time-consuming
+	MscanA[0] = p->scanA[0];
+	MscanA[1] = p->scanA[1];
+	MscanA[2] = p->scanA[2];
+	MscanA[3] = p->scanA[3];
+	MscanA[4] = p->scanA[4];
+	MscanA[5] = p->scanA[5];
+}
+void task_Version_ind(rf_packet_version_ind_t* p){
+	Mvendor = p->vendor;
+}
+
 
 /*task_connection_terminated
  * This event is returned once connection is terminated
@@ -310,10 +328,10 @@ void main_loop()
 		blt_adv_interval = ((rand()% 10) + LOW_ADV_INTERVAL-1)*CLOCK_SYS_CLOCK_1MS;
 	}
 	else {
-		if((device_status_tmp==CONNECTED_DEVICE_STATUS)&& clock_time_exceed(tick_connected_timer_tmp,1*1000*1000))
-		{
+		if((device_status_tmp==CONNECTED_DEVICE_STATUS)&& clock_time_exceed(tick_connected_timer_tmp,1*1000*1000)) {
 			device_status_tmp=AFTER_CONNECTED_DEVICE_STATUS;
-			blt_update_connPara_request(160,180,4,400);
+			blt_update_connPara_request(160,180,4,600);
+//			blt_update_connPara_request(16,32,0,400);
 		}
 	}
 /******************************public area*******************/

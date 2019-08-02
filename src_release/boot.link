@@ -10,6 +10,11 @@ SECTIONS
         *(.vectors)
         *(.vectors.*)	/* MUST as follows, when compile with -ffunction-sections -fdata-sections, session name may changed */
         }
+        .ota :
+        {
+        *(.ota)
+        *(.ota.*)
+        }
 	. = (((. + 3) / 4)*4);
 	PROVIDE(_dstored_data_ = .);
 	. = . + 0x808000 ;
